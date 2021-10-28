@@ -3,34 +3,33 @@ import * as C from "./styles.js";
 
 import { useParams } from "react-router";
 
-import api from "../../api";
+import { getRepoData, getUserData } from "../../api";
+import MainHeader from "../../components/MainHeader/index.jsx";
+import Aside from "../../components/Aside/index.jsx";
+import Content from "../../components/Content/index.jsx";
 
 const Home = () => {
-  const [data, setData] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const [repos, setRepos] = useState([]);
+
   const { user } = useParams();
 
   useEffect(() => {
     const getApiData = async () => {
-      try {
-        const res = await api.get(`users/${user}`);
-        setData(res.data);
-      } catch (err) {
-        console.log(err);
-      }
+      const data = await getUserData(user);
+      setUserData(data);
+      const repoData = await getRepoData(user);
+      setRepos(repoData);
     };
+
     getApiData();
   }, [user]);
 
-  function getData() {
-    console.log(data);
-  }
-
   return (
     <C.Container>
-      <C.UserProfile>
-        <button onClick={getData}>oi</button>
-      </C.UserProfile>
-      <C.MainContent></C.MainContent>
+      <MainHeader />
+      <Aside userData={userData} />
+      <Content reposData={repos} />
     </C.Container>
   );
 };
