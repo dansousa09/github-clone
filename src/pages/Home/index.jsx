@@ -1,25 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { getRepoData, getUserData } from "../../api";
+import { useParams } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
 import * as C from "./styles.js";
 
-import { useParams } from "react-router";
-
-import { getRepoData, getUserData } from "../../api";
 import MainHeader from "../../components/MainHeader/index.jsx";
 import Aside from "../../components/Aside/index.jsx";
 import Content from "../../components/Content/index.jsx";
 
 const Home = () => {
-  const [userData, setUserData] = useState([]);
-  const [repos, setRepos] = useState([]);
-
   const { user } = useParams();
+
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.userData);
+  const repos = useSelector((state) => state.repos);
 
   useEffect(() => {
     const getApiData = async () => {
       const data = await getUserData(user);
-      setUserData(data);
       const repoData = await getRepoData(user);
-      setRepos(repoData);
+      dispatch({ type: "GET_USERDATA", payload: data });
+      dispatch({ type: "GET_REPOS", payload: repoData });
+      console.log(userData, repos);
     };
 
     getApiData();
