@@ -1,6 +1,6 @@
 # GitHub Clone
 
-Builded with Create-React-App, styled-components and react-router-dom;
+Builded with Create-React-App, redux, styled-components and react-router-dom;
 
 ## Features:
 
